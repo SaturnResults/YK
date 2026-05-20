@@ -368,7 +368,7 @@ document.addEventListener('click', function (e) {
 
   e.preventDefault();
   document.body.classList.add('page-exit');
-  setTimeout(() => { window.location.href = href; }, 380);
+  setTimeout(() => { window.location.href = href; }, 140);
 });
 
 // Treatment finder teaser card — smooth scroll to quiz
