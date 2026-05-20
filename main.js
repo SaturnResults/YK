@@ -347,29 +347,45 @@ if (backToTop) {
   });
 })();
 
-// On bfcache restore (back/forward), reset animation so page isn't invisible
-window.addEventListener('pageshow', function (e) {
-  if (e.persisted) {
-    document.body.classList.remove('page-exit');
-    document.body.style.animation = 'none';
-    requestAnimationFrame(function () { document.body.style.animation = ''; });
-  }
-});
+// Page transition veil
+(function () {
+  // Inject veil element once
+  const veil = document.createElement('div');
+  veil.id = 'page-veil';
+  document.body.appendChild(veil);
 
-// Page transitions — brief fade out then navigate
-document.addEventListener('click', function (e) {
-  const link = e.target.closest('a[href]');
-  if (!link) return;
+  // Fade in on arrival (start opaque, fade to clear)
+  veil.classList.add('veil-in');
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      veil.classList.remove('veil-in');
+    });
+  });
 
-  const href = link.getAttribute('href');
-  if (!href || href.startsWith('http') || href.startsWith('#') ||
-      href.startsWith('mailto:') || href.startsWith('tel:') ||
-      href.startsWith('javascript') || link.target === '_blank') return;
+  // bfcache: ensure veil is clear when navigating back/forward
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+      veil.style.transition = 'none';
+      veil.classList.remove('veil-in');
+      requestAnimationFrame(function () {
+        veil.style.transition = '';
+      });
+    }
+  });
 
-  e.preventDefault();
-  document.body.classList.add('page-exit');
-  setTimeout(() => { window.location.href = href; }, 140);
-});
+  // Fade out on navigate away
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('http') || href.startsWith('#') ||
+        href.startsWith('mailto:') || href.startsWith('tel:') ||
+        href.startsWith('javascript') || link.target === '_blank') return;
+    e.preventDefault();
+    veil.classList.add('veil-in');
+    setTimeout(function () { window.location.href = href; }, 180);
+  });
+})();
 
 // Treatment finder teaser card — smooth scroll to quiz
 document.querySelector('.js-scroll-to-quiz')?.addEventListener('click', function (e) {
