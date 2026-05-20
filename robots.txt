@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /privacy-policy/
+Disallow: /terms/
+
+Sitemap: https://ykwellness.co.uk/sitemap.xml
