@@ -684,7 +684,7 @@ section { padding: 6rem 0; }
 
 /* On mobile: arrows bottom-aligned with dots, on left and right of card */
 @media (max-width: 768px) {
-  .hero-slider { padding: 4.5rem 0.4rem 0.75rem; }
+  .hero-slider { padding: 4.5rem 0.75rem 0.75rem; }
   .hero-slider__arrow {
     top: auto;
     bottom: 0.75rem;
