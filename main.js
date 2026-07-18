@@ -178,24 +178,44 @@ document.querySelectorAll('.faq-question').forEach(q => {
     cellulite: { badge: 'Best for skin health',         title: 'Anti-Cellulite Massage',     desc: 'Combines lymphatic drainage and targeted deep-tissue techniques to improve circulation, reduce the appearance of cellulite and restore skin texture and firmness over time.',         link: '/anti-cellulite-massage/' },
   };
 
-  // Q2 question text changes based on Q1
-  const q2Questions = {
-    pain:        'How long have you been experiencing this?',
-    tension:     'How would you describe it?',
-    relax:       'What kind of session suits you best?',
-    performance: 'Where are you in your training cycle?',
-    skin:        'What best describes your situation?',
-    structure:   'How long has this been affecting you?',
-    other:       "What best describes what you’re looking for?",
-  };
-  const q2Labels = {
-    pain:        ['chronic','recent','acute','maintenance'],
-    tension:     ['chronic','recent','acute','maintenance'],
-    relax:       ['maintenance','maintenance','maintenance','maintenance'],
-    performance: ['chronic','recent','acute','maintenance'],
-    skin:        ['chronic','recent','acute','maintenance'],
-    structure:   ['chronic','recent','acute','maintenance'],
-    other:       ['chronic','recent','acute','maintenance'],
+  // Q2 question + options adapt to the Q1 answer, so they always make sense
+  const q2Sets = {
+    pain: {
+      q: 'How long have you been dealing with it?',
+      opts: [
+        { val: 'chronic',     t: 'Months or longer',    s: "Keeps coming back or never fully goes" },
+        { val: 'recent',      t: 'A few weeks',         s: "Recent, and not settling on its own" },
+        { val: 'acute',       t: 'Just started',        s: "This week, or after a specific event" },
+        { val: 'maintenance', t: 'It comes and goes',   s: "Manageable, but always there" },
+      ],
+    },
+    tension: {
+      q: 'How would you describe it?',
+      opts: [
+        { val: 'chronic',     t: 'Deep, stubborn knots',   s: "Long-standing tightness that won't release" },
+        { val: 'recent',      t: 'Built-up tightness',     s: "From desk work, stress or training load" },
+        { val: 'acute',       t: 'Suddenly seized up',     s: "Sharp, recent, or spasming" },
+        { val: 'maintenance', t: 'General stiffness',      s: "Just feel tight and want a reset" },
+      ],
+    },
+    relax: {
+      q: 'What are you looking for?',
+      opts: [
+        { val: 'chronic',     t: 'Switch off & de-stress', s: "Calm the mind, ease everyday tension" },
+        { val: 'maintenance', t: 'Better sleep & recovery',s: "Wind down a busy nervous system" },
+        { val: 'recent',      t: 'A full-body reset',      s: "Top-to-toe and deeply restorative" },
+        { val: 'acute',       t: 'Gentle, lighter touch',  s: "Soothing rather than deep pressure" },
+      ],
+    },
+    performance: {
+      q: 'Where are you in your training?',
+      opts: [
+        { val: 'chronic',     t: 'In heavy training',        s: "High load, need to keep performing" },
+        { val: 'recent',      t: 'Recovering from a session', s: "Post-training or post-event" },
+        { val: 'acute',       t: 'Nursing a niggle',          s: "Something's started to flare up" },
+        { val: 'maintenance', t: 'General upkeep',            s: "Stay loose and injury-free" },
+      ],
+    },
   };
 
   let ans = {};
@@ -228,9 +248,19 @@ document.querySelectorAll('.faq-question').forEach(q => {
 
     document.getElementById('quizResultBadge').textContent = t.badge;
     document.getElementById('quizResultTitle').textContent = t.title;
-    document.getElementById('quizResultDesc').textContent  = t.desc;
+    const descEl = document.getElementById('quizResultDesc');
+    descEl.textContent = t.desc;
     const learnBtn = document.getElementById('quizLearnBtn');
     if (learnBtn) learnBtn.href = t.link;
+
+    // Reassurance note: ties the recommendation to the assessment-led mechanism
+    if (descEl && !document.getElementById('quizResultNote')) {
+      const note = document.createElement('p');
+      note.id = 'quizResultNote';
+      note.className = 'quiz-result__note';
+      note.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A starting point, not a diagnosis. Your therapist confirms it with a quick assessment on the day.';
+      descEl.parentNode.insertBefore(note, descEl.nextSibling);
+    }
 
     const alsoRow  = document.getElementById('quizResultAlso');
     const alsoLink = document.getElementById('quizAlsoLink');
@@ -243,6 +273,22 @@ document.querySelectorAll('.faq-question').forEach(q => {
     }
   }
 
+  // Build Q2's question + options to match the Q1 answer, then wire them up
+  function populateStep2(q1) {
+    const set = q2Sets[q1] || q2Sets.pain;
+    const qEl = document.getElementById('quiz2Q');
+    if (qEl) qEl.textContent = set.q;
+    const wrap = document.getElementById('quiz2Opts');
+    if (!wrap) return;
+    wrap.innerHTML = set.opts.map(o =>
+      '<button class="quiz-opt" data-val="' + o.val + '"><span class="quiz-opt__text"><strong>' +
+      o.t + '</strong><em>' + o.s + '</em></span></button>'
+    ).join('');
+    wrap.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.addEventListener('click', () => { ans.q2 = btn.dataset.val; showStep('quizStep3'); });
+    });
+  }
+
   document.querySelectorAll('#quizStep1 .quiz-opt').forEach(btn => {
     btn.addEventListener('click', () => {
       ans.q1 = btn.dataset.val;
@@ -252,14 +298,9 @@ document.querySelectorAll('.faq-question').forEach(q => {
         showStep('quizStep3');
         return;
       }
-      // Update Q2 question text
-      const qEl = document.getElementById('quiz2Q');
-      if (qEl) qEl.textContent = q2Questions[ans.q1] || q2Questions.pain;
+      populateStep2(ans.q1);
       showStep('quizStep2');
     });
-  });
-  document.querySelectorAll('#quizStep2 .quiz-opt').forEach(btn => {
-    btn.addEventListener('click', () => { ans.q2 = btn.dataset.val; showStep('quizStep3'); });
   });
   document.querySelectorAll('#quizStep3 .quiz-opt').forEach(btn => {
     btn.addEventListener('click', () => { ans.q3 = btn.dataset.val; showStep('quizResult'); });

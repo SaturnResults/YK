@@ -56,28 +56,45 @@
     .vhero__proof-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.18); }
 
     .vhero__visual { position: relative; }
-    .vhero__img-wrap {
+    .vhero__slider {
       position: relative; border-radius: var(--radius-lg);
       overflow: hidden; aspect-ratio: 4 / 4.6;
       box-shadow: 0 30px 70px rgba(0,0,0,0.45);
     }
-    .vhero__img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+    .vhero__slide {
+      position: absolute; inset: 0;
+      opacity: 0; transition: opacity 0.9s ease; pointer-events: none;
+    }
+    .vhero__slide.is-active { opacity: 1; pointer-events: auto; }
+    .vhero__img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
     .vhero__nametag {
       position: absolute; left: 1rem; bottom: 1rem; right: 1rem;
-      background: rgba(20,12,6,0.62); backdrop-filter: blur(8px);
+      background: rgba(20,12,6,0.62); backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.14); border-radius: var(--radius-md);
-      padding: 0.85rem 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.9rem 1.1rem;
     }
-    .vhero__nametag b { color: #fff; font-weight: 600; font-size: 0.98rem; display: block; }
-    .vhero__nametag span { color: rgba(253,248,243,0.68); font-size: 0.8rem; }
-    .vhero__nametag .rating { color: var(--sage); font-weight: 700; font-size: 0.92rem; white-space: nowrap; }
+    .vhero__nametag b { color: #fff; font-weight: 600; font-size: 1.02rem; display: block; }
+    .vhero__role { display: block; color: rgba(253,248,243,0.66); font-size: 0.78rem; margin-top: 0.1rem; }
+    .vhero__spec {
+      display: inline-block; margin-top: 0.55rem; color: var(--sage);
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.01em;
+    }
+    .vhero__dots {
+      position: absolute; top: 1rem; right: 1rem; z-index: 3;
+      display: flex; gap: 0.4rem;
+    }
+    .vhero__dots button {
+      width: 7px; height: 7px; border-radius: 50%; padding: 0; cursor: pointer;
+      border: none; background: rgba(255,255,255,0.4); transition: background 0.25s, transform 0.25s;
+    }
+    .vhero__dots button.is-active { background: #fff; transform: scale(1.35); }
 
     @media (max-width: 860px) {
       .vhero { padding: 6.5rem 0 3rem; }
       .vhero__grid { grid-template-columns: 1fr; gap: 2.2rem; }
       .vhero__sub { max-width: none; }
-      .vhero__img-wrap { aspect-ratio: 4 / 3.4; max-height: 440px; }
-      .vhero__img { object-position: center 22%; }
+      .vhero__slider { aspect-ratio: 4 / 3.6; max-height: 460px; }
+      .vhero__img { object-position: center 20%; }
     }
 
     /* ===== Mechanism / how we work ===== */
@@ -261,15 +278,40 @@
         </div>
       </div>
       <div class="vhero__visual fade-up">
-        <div class="vhero__img-wrap">
-          <img src="/img/yury-hero.jpeg" alt="Yury Kanavalau, founder and lead therapist at YK Wellness" class="vhero__img" />
-          <div class="vhero__nametag">
-            <div>
+        <div class="vhero__slider" id="staffSlider">
+          <div class="vhero__slide is-active">
+            <img src="/img/yury-hero.jpeg" alt="Yury Kanavalau, founder and lead massage therapist at YK Wellness" class="vhero__img" />
+            <div class="vhero__nametag">
               <b>Yury Kanavalau</b>
-              <span>Founder &amp; Lead Therapist</span>
+              <span class="vhero__role">Founder &amp; Lead Massage Therapist</span>
+              <span class="vhero__spec">Advanced clinical &amp; deep tissue work</span>
             </div>
-            <div class="rating">&#9733; 5.0</div>
           </div>
+          <div class="vhero__slide">
+            <img src="/img/staff-alfie.jpeg" alt="Alfie Munding, osteopath at YK Wellness" class="vhero__img" />
+            <div class="vhero__nametag">
+              <b>Alfie Munding</b>
+              <span class="vhero__role">Osteopath, M.Ost</span>
+              <span class="vhero__spec">Structural &amp; cranial osteopathy · chronic pain</span>
+            </div>
+          </div>
+          <div class="vhero__slide">
+            <img src="/img/staff-giuseppe.jpeg" alt="Giuseppe Giarratana, sports therapist at YK Wellness" class="vhero__img" />
+            <div class="vhero__nametag">
+              <b>Giuseppe Giarratana</b>
+              <span class="vhero__role">Sports Therapist &amp; Advanced Massage</span>
+              <span class="vhero__spec">Sports therapy &amp; performance recovery</span>
+            </div>
+          </div>
+          <div class="vhero__slide">
+            <img src="/img/staff-wentai.jpeg" alt="Wen Tai Li, osteopath and naturopath at YK Wellness" class="vhero__img" />
+            <div class="vhero__nametag">
+              <b>Wen Tai Li</b>
+              <span class="vhero__role">Osteopath &amp; Naturopath, GOsC Reg.</span>
+              <span class="vhero__spec">Nervous-system balance &amp; pain management</span>
+            </div>
+          </div>
+          <div class="vhero__dots" id="staffDots" aria-hidden="true"></div>
         </div>
       </div>
     </div>
@@ -763,6 +805,45 @@
     </div>
   </div>
 </div>
+
+<!-- Staff hero slideshow -->
+<script>
+(function () {
+  var slider = document.getElementById('staffSlider');
+  if (!slider) return;
+  var slides = slider.querySelectorAll('.vhero__slide');
+  var dotsWrap = document.getElementById('staffDots');
+  var current = 0, timer = null;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Build dots
+  var dots = [];
+  slides.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Show therapist ' + (i + 1));
+    if (i === 0) b.classList.add('is-active');
+    b.addEventListener('click', function () { go(i); restart(); });
+    dotsWrap.appendChild(b);
+    dots.push(b);
+  });
+
+  function go(i) {
+    slides[current].classList.remove('is-active');
+    dots[current].classList.remove('is-active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('is-active');
+    dots[current].classList.add('is-active');
+  }
+  function next() { go(current + 1); }
+  function restart() { if (reduce) return; clearInterval(timer); timer = setInterval(next, 4200); }
+
+  restart();
+  // Pause on hover (desktop)
+  slider.addEventListener('mouseenter', function () { clearInterval(timer); });
+  slider.addEventListener('mouseleave', restart);
+})();
+</script>
 
 <script src="/chatbot.js"></script>
 <script src="/main.js"></script>
