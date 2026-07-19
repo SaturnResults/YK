@@ -388,46 +388,6 @@ if (backToTop) {
   });
 })();
 
-// Page transition veil
-(function () {
-  // Inject veil element once
-  const veil = document.createElement('div');
-  veil.id = 'page-veil';
-  document.body.appendChild(veil);
-
-  // Fade in on arrival (start opaque, fade to clear)
-  veil.classList.add('veil-in');
-  requestAnimationFrame(function () {
-    requestAnimationFrame(function () {
-      veil.classList.remove('veil-in');
-    });
-  });
-
-  // bfcache: ensure veil is clear when navigating back/forward
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted) {
-      veil.style.transition = 'none';
-      veil.classList.remove('veil-in');
-      requestAnimationFrame(function () {
-        veil.style.transition = '';
-      });
-    }
-  });
-
-  // Fade out on navigate away
-  document.addEventListener('click', function (e) {
-    const link = e.target.closest('a[href]');
-    if (!link) return;
-    const href = link.getAttribute('href');
-    if (!href || href.startsWith('http') || href.startsWith('#') ||
-        href.startsWith('mailto:') || href.startsWith('tel:') ||
-        href.startsWith('javascript') || link.target === '_blank') return;
-    e.preventDefault();
-    veil.classList.add('veil-in');
-    setTimeout(function () { window.location.href = href; }, 180);
-  });
-})();
-
 // Treatment finder teaser card — smooth scroll to quiz
 document.querySelector('.js-scroll-to-quiz')?.addEventListener('click', function (e) {
   e.preventDefault();

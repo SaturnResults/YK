@@ -102,20 +102,40 @@
       border: none; background: rgba(255,255,255,0.4); transition: background 0.25s, transform 0.25s;
     }
     .vhero__dots button.is-active { background: #fff; transform: scale(1.35); }
+    /* Prev / next therapist arrows */
+    .vhero__nav {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+      width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+      display: grid; place-items: center; color: #fff;
+      background: rgba(20,12,6,0.45); border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(6px); transition: background 0.2s, transform 0.2s;
+    }
+    .vhero__nav svg { width: 18px; height: 18px; }
+    .vhero__nav:hover { background: var(--sage); border-color: var(--sage); }
+    .vhero__nav--prev { left: 0.8rem; }
+    .vhero__nav--next { right: 0.8rem; }
+    .vhero__nav--prev:hover { transform: translateY(-50%) translateX(-2px); }
+    .vhero__nav--next:hover { transform: translateY(-50%) translateX(2px); }
 
     @media (max-width: 860px) {
       .vhero { padding: 6.5rem 0 3rem; }
       .vhero__grid { grid-template-columns: 1fr; gap: 2.2rem; }
       .vhero__sub { max-width: none; }
-      .vhero__slider { aspect-ratio: 4 / 3.6; max-height: 460px; }
-      .vhero__img { object-position: center 20%; }
-      /* Equal-width, full-width CTAs */
-      .vhero__cta { gap: 0.7rem; }
-      .vhero__cta .btn { flex: 1 1 100%; justify-content: center; text-align: center; }
-      /* Proof stats on a single line */
-      .vhero__proof { flex-wrap: nowrap; gap: 0.6rem; font-size: 0.66rem; }
-      .vhero__proof .stars { display: none; }
-      .vhero__proof-divider { height: 12px; }
+      /* H1 +15% on mobile */
+      .vhero h1 { font-size: clamp(3rem, 8.6vw, 3.6rem); }
+      /* Taller frame; pure object-position (no zoom) so faces sit above the nametag */
+      .vhero__slider { aspect-ratio: 4 / 4.3; max-height: 540px; }
+      .vhero__img { object-position: center 30%; transform: none; }
+      .vhero__img--alfie    { object-position: center 70%; transform: none; }
+      .vhero__img--giuseppe { object-position: center 56%; transform: none; }
+      .vhero__img--wentai   { object-position: center 70%; transform: none; }
+      /* CTAs 25% narrower, stacked */
+      .vhero__cta { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+      .vhero__cta .btn { width: 75%; justify-content: center; text-align: center; }
+      /* Proof stats: vertical, centered stack */
+      .vhero__proof { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; font-size: 0.85rem; }
+      .vhero__proof .stars { display: inline; }
+      .vhero__proof-divider { display: none; }
     }
 
     /* ===== Mechanism / how we work ===== */
@@ -352,6 +372,12 @@
               </a>
             </div>
           </div>
+          <button class="vhero__nav vhero__nav--prev" id="staffPrev" type="button" aria-label="Previous therapist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="vhero__nav vhero__nav--next" id="staffNext" type="button" aria-label="Next therapist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
           <div class="vhero__dots" id="staffDots" aria-hidden="true"></div>
         </div>
       </div>
@@ -877,7 +903,13 @@
     dots[current].classList.add('is-active');
   }
   function next() { go(current + 1); }
+  function prev() { go(current - 1); }
   function restart() { if (reduce) return; clearInterval(timer); timer = setInterval(next, 3000); }
+
+  var prevBtn = document.getElementById('staffPrev');
+  var nextBtn = document.getElementById('staffNext');
+  if (prevBtn) prevBtn.addEventListener('click', function () { prev(); restart(); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { next(); restart(); });
 
   restart();
   // Pause on hover (desktop)
