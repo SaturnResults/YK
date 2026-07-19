@@ -1174,6 +1174,11 @@ section { padding: 6rem 0; }
   overflow: hidden;
   border: 1px solid var(--sand);
   transition: var(--transition);
+  scroll-margin-top: 110px;
+}
+/* Briefly highlight a team card when linked to via anchor */
+.team-card[id]:target {
+  box-shadow: 0 0 0 2px var(--sage), var(--shadow-md);
 }
 .team-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
 .team-card__avatar {
