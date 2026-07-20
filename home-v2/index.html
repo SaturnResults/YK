@@ -26,6 +26,9 @@
       gap: 3.5rem;
       align-items: center;
     }
+    /* Allow columns to shrink so the marquee track can't force overflow */
+    .vhero__copy { min-width: 0; }
+    .vhero__proof { max-width: 100%; }
     .vhero__eyebrow {
       display: inline-flex; align-items: center; gap: 0.55rem;
       font-family: var(--font-sans); font-size: 0.74rem; font-weight: 600;
@@ -46,14 +49,23 @@
       max-width: 30rem; margin: 0 0 2rem;
     }
     .vhero__cta { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
+    /* Proof as a constant horizontal marquee */
     .vhero__proof {
-      display: flex; align-items: center; gap: 1.1rem 1.5rem; flex-wrap: wrap;
+      position: relative; overflow: hidden;
       padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.12);
-      font-size: 0.86rem; color: rgba(253,248,243,0.7);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
     }
-    .vhero__proof strong { color: #fff; font-weight: 600; }
-    .vhero__proof .stars { color: var(--sage); letter-spacing: 1px; }
-    .vhero__proof-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.18); }
+    .vhero__proof-track {
+      display: flex; align-items: center; gap: 1.6rem; width: max-content;
+      animation: proofMarquee 26s linear infinite;
+    }
+    @keyframes proofMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .vhero__proof-track { animation: none; } }
+    .vp-item { font-size: 0.86rem; color: rgba(253,248,243,0.72); white-space: nowrap; }
+    .vp-item strong { color: #fff; font-weight: 600; }
+    .vp-item .stars { color: var(--sage); letter-spacing: 1px; margin-right: 2px; }
+    .vp-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.4); flex-shrink: 0; }
 
     .vhero__visual { position: relative; }
     .vhero__slider {
@@ -121,8 +133,11 @@
       .vhero { padding: 6.5rem 0 3rem; }
       .vhero__grid { grid-template-columns: 1fr; gap: 2.2rem; }
       .vhero__sub { max-width: none; }
-      /* H1 +15% on mobile */
-      .vhero h1 { font-size: clamp(3rem, 8.6vw, 3.6rem); }
+      /* Eyebrow on a single line */
+      .vhero__eyebrow { font-size: 0.6rem; letter-spacing: 0.1em; white-space: nowrap; }
+      .vhero__eyebrow::before { width: 16px; }
+      /* H1 kept to two lines on mobile */
+      .vhero h1 { font-size: clamp(2.3rem, 8vw, 3rem); }
       /* Taller frame; pure object-position (no zoom) so faces sit above the nametag */
       .vhero__slider { aspect-ratio: 4 / 4.3; max-height: 540px; }
       .vhero__img { object-position: center 30%; transform: none; }
@@ -132,10 +147,6 @@
       /* CTAs 25% narrower, stacked */
       .vhero__cta { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
       .vhero__cta .btn { width: 75%; justify-content: center; text-align: center; }
-      /* Proof stats: vertical, centered stack */
-      .vhero__proof { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; font-size: 0.85rem; }
-      .vhero__proof .stars { display: inline; }
-      .vhero__proof-divider { display: none; }
     }
 
     /* ===== Mechanism / how we work ===== */
@@ -162,6 +173,40 @@
     .mech__banner-stat b { font-family: var(--font-serif); font-size: 2.8rem; color: var(--sage); line-height: 1; }
     .mech__banner-stat span { color: rgba(253,248,243,0.85); font-size: 1rem; max-width: 16rem; line-height: 1.4; }
     .mech__banner p { color: rgba(253,248,243,0.7); font-size: 0.95rem; margin: 0; max-width: 26rem; }
+
+    /* ===== Featured review under the quiz ===== */
+    .quiz-review {
+      max-width: 620px; margin: 2rem auto 0; text-align: center;
+      padding-top: 2rem; border-top: 1px solid var(--sand);
+    }
+    .quiz-review__stars { color: var(--sage); letter-spacing: 2px; font-size: 1rem; margin-bottom: 0.6rem; }
+    .quiz-review__quote {
+      font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.5;
+      color: var(--charcoal); font-style: italic; margin: 0 auto 1.1rem; max-width: 34rem;
+    }
+    .quiz-review__meta { display: flex; align-items: center; justify-content: center; gap: 0.7rem; flex-wrap: wrap; }
+    .quiz-review__avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: var(--sage);
+      color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; flex-shrink: 0;
+    }
+    .quiz-review__who { display: flex; flex-direction: column; text-align: left; }
+    .quiz-review__name { font-weight: 600; color: var(--charcoal); font-size: 0.92rem; }
+    .quiz-review__via { font-size: 0.78rem; color: var(--light); }
+    .quiz-review__more {
+      margin-left: 0.6rem; font-size: 0.85rem; font-weight: 600; color: var(--sage-dark);
+      text-decoration: none; white-space: nowrap;
+    }
+    .quiz-review__more:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ===== Mobile: tighten quiz spacing + subtitle ===== */
+    @media (max-width: 640px) {
+      #quiz.quiz-section { padding: 1.25rem 0 2.5rem; }
+      #quiz .section-header { margin-bottom: 1.1rem; }
+      #quiz .section-header p { font-size: 0.84rem; line-height: 1.5; max-width: 22rem; margin-left: auto; margin-right: auto; }
+      .quiz-review { margin-top: 1.6rem; padding-top: 1.6rem; }
+      .quiz-review__quote { font-size: 1.08rem; }
+      .quiz-review__more { margin-left: 0; margin-top: 0.4rem; width: 100%; }
+    }
   </style>
   <!-- Open Graph / WhatsApp preview -->
   <meta property="og:type" content="website" />
@@ -310,12 +355,30 @@
           <a href="#quiz" class="btn btn-primary js-scroll-to-quiz">Find your treatment &rarr;</a>
           <a href="https://www.fresha.com/a/yk-wellness-london-westway-sports-fitness-centre-uk-1-crowthorne-road-git4ohyh" target="_blank" class="btn btn-slide">Book an assessment</a>
         </div>
-        <div class="vhero__proof">
-          <span><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> on Google</span>
-          <span class="vhero__proof-divider"></span>
-          <span><strong>400+</strong> five-star reviews</span>
-          <span class="vhero__proof-divider"></span>
-          <span><strong>70%</strong> of clients return</span>
+        <div class="vhero__proof" aria-label="Trusted by clients across West London">
+          <div class="vhero__proof-track">
+            <span class="vp-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> on Google</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>400+</strong> five-star reviews</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>70%</strong> of clients return</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>8+</strong> years in West London</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>GOsC</strong> registered osteopaths</span>
+            <span class="vp-dot"></span>
+            <!-- duplicate set for a seamless loop -->
+            <span class="vp-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> on Google</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>400+</strong> five-star reviews</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>70%</strong> of clients return</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>8+</strong> years in West London</span>
+            <span class="vp-dot"></span>
+            <span class="vp-item"><strong>GOsC</strong> registered osteopaths</span>
+            <span class="vp-dot"></span>
+          </div>
         </div>
       </div>
       <div class="vhero__visual fade-up">
@@ -483,6 +546,20 @@
         <button class="quiz-restart" id="quizRestart">&#8592; Start again</button>
       </div>
     </div>
+
+    <!-- Single featured review + link to more -->
+    <div class="quiz-review fade-up">
+      <div class="quiz-review__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="quiz-review__quote">"Categorically the best sports massage therapist I've ever had. He connects with the muscle fibres so well, almost as if he can see where every adhesion is. Without him my back wouldn't have improved so much."</p>
+      <div class="quiz-review__meta">
+        <div class="quiz-review__avatar">A</div>
+        <div class="quiz-review__who">
+          <span class="quiz-review__name">Azaan Rehan</span>
+          <span class="quiz-review__via">Google Review</span>
+        </div>
+        <a href="#reviews" class="quiz-review__more">See more reviews &rarr;</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -642,7 +719,7 @@
 </section>
 
 <!-- TESTIMONIALS (lead with specific-problem stories) -->
-<section class="testimonials">
+<section class="testimonials" id="reviews" style="scroll-margin-top:100px;">
   <div class="container">
     <div class="section-header section-header--center fade-up">
       <p class="eyebrow">Client Stories</p>

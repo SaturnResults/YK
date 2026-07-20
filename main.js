@@ -161,10 +161,10 @@ document.querySelectorAll('.faq-question').forEach(q => {
       maintenance: { upper: {p:'osteo',   a:'deep'},    lower: {p:'osteo',  a:'deep'},   whole: {p:'osteo',  a:'swedish'},posture: {p:'osteo',  a:'deep'}   },
     },
     other: {
-      chronic:     { upper: {p:'deep',    a:'swedish'}, lower: {p:'deep',   a:'sports'}, whole: {p:'swedish',a:'deep'},   posture: {p:'osteo',  a:'deep'}   },
-      recent:      { upper: {p:'deep',    a:'swedish'}, lower: {p:'sports', a:'deep'},   whole: {p:'swedish',a:'deep'},   posture: {p:'deep',   a:'swedish'} },
-      acute:       { upper: {p:'sports',  a:'deep'},    lower: {p:'sports', a:'deep'},   whole: {p:'sports', a:'swedish'},posture: {p:'osteo',  a:'deep'}   },
-      maintenance: { upper: {p:'swedish', a:'cbd'},     lower: {p:'swedish',a:'deep'},   whole: {p:'swedish',a:'cbd'},    posture: {p:'swedish',a:'deep'}   },
+      chronic:     { upper: {p:'assessment', a:'deep'},  lower: {p:'assessment', a:'sports'}, whole: {p:'assessment', a:'swedish'}, posture: {p:'assessment', a:'osteo'} },
+      recent:      { upper: {p:'assessment', a:'deep'},  lower: {p:'assessment', a:'sports'}, whole: {p:'assessment', a:'swedish'}, posture: {p:'assessment', a:'osteo'} },
+      acute:       { upper: {p:'assessment', a:'deep'},  lower: {p:'assessment', a:'sports'}, whole: {p:'assessment', a:'swedish'}, posture: {p:'assessment', a:'osteo'} },
+      maintenance: { upper: {p:'assessment', a:'deep'},  lower: {p:'assessment', a:'sports'}, whole: {p:'assessment', a:'swedish'}, posture: {p:'assessment', a:'osteo'} },
     },
   };
 
@@ -176,6 +176,7 @@ document.querySelectorAll('.faq-question').forEach(q => {
     cbd:       { badge: 'Best for deep relaxation',     title: 'CBD Massage',                desc: 'Therapeutic massage combined with premium CBD oil for enhanced anti-inflammatory relief, deeper relaxation and accelerated recovery. A step up from Swedish for mind and body.',       link: '/cbd-massage/' },
     lymph:     { badge: 'Best for circulation',         title: 'Lymphatic Drainage',         desc: 'Gentle, rhythmic massage that stimulates the lymphatic system, reduces fluid retention and supports recovery. Ideal after surgery, illness or for general immune support.',            link: '/lymphatic-drainage-massage/' },
     cellulite: { badge: 'Best for skin health',         title: 'Anti-Cellulite Massage',     desc: 'Combines lymphatic drainage and targeted deep-tissue techniques to improve circulation, reduce the appearance of cellulite and restore skin texture and firmness over time.',         link: '/anti-cellulite-massage/' },
+    assessment:{ badge: 'Recommended starting point',   title: 'Assessment-Led Treatment',   desc: 'Not sure what you need? Start here. Your therapist assesses you on the day and builds a bespoke treatment tailored to what your body actually needs, drawing on whichever techniques fit best. No guessing, just the right hands-on care.', link: '/assessment-led-treatment/' },
   };
 
   // Q2 question + options adapt to the Q1 answer, so they always make sense
