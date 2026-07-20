@@ -49,10 +49,19 @@
       max-width: 30rem; margin: 0 0 2rem;
     }
     .vhero__cta { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
-    /* Proof as a constant horizontal marquee */
-    .vhero__proof {
-      position: relative; overflow: hidden;
-      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.12);
+    /* Shared top rule */
+    .vhero__proof { padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.12); }
+    /* Desktop: static row with dividers */
+    .vhero__proof--static {
+      display: flex; align-items: center; gap: 1.1rem 1.5rem; flex-wrap: wrap;
+      font-size: 0.86rem; color: rgba(253,248,243,0.7);
+    }
+    .vhero__proof--static strong { color: #fff; font-weight: 600; }
+    .vhero__proof--static .stars { color: var(--sage); letter-spacing: 1px; }
+    .vhero__proof-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.18); }
+    /* Mobile: constant horizontal marquee (hidden on desktop) */
+    .vhero__proof--marquee {
+      display: none; position: relative; overflow: hidden;
       -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
       mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
     }
@@ -133,6 +142,9 @@
       .vhero { padding: 6.5rem 0 3rem; }
       .vhero__grid { grid-template-columns: 1fr; gap: 2.2rem; }
       .vhero__sub { max-width: none; }
+      /* Swap static row for marquee on mobile */
+      .vhero__proof--static { display: none; }
+      .vhero__proof--marquee { display: block; }
       /* Eyebrow on a single line */
       .vhero__eyebrow { font-size: 0.6rem; letter-spacing: 0.1em; white-space: nowrap; }
       .vhero__eyebrow::before { width: 16px; }
@@ -355,7 +367,14 @@
           <a href="#quiz" class="btn btn-primary js-scroll-to-quiz">Find your treatment &rarr;</a>
           <a href="https://www.fresha.com/a/yk-wellness-london-westway-sports-fitness-centre-uk-1-crowthorne-road-git4ohyh" target="_blank" class="btn btn-slide">Book an assessment</a>
         </div>
-        <div class="vhero__proof" aria-label="Trusted by clients across West London">
+        <div class="vhero__proof vhero__proof--static">
+          <span><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> on Google</span>
+          <span class="vhero__proof-divider"></span>
+          <span><strong>400+</strong> five-star reviews</span>
+          <span class="vhero__proof-divider"></span>
+          <span><strong>70%</strong> of clients return</span>
+        </div>
+        <div class="vhero__proof vhero__proof--marquee" aria-label="Trusted by clients across West London">
           <div class="vhero__proof-track">
             <span class="vp-item"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> on Google</span>
             <span class="vp-dot"></span>
