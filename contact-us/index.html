@@ -203,7 +203,10 @@
       <div class="contact-form-wrap fade-up">
         <h3>Send us a message</h3>
         <p>Not sure which treatment is right for you? Have a question before booking? Fill in the form and we'll get back to you within one working day.</p>
-        <form onsubmit="handleForm(event)">
+        <form id="contactForm" action="https://formspree.io/f/mwlpverq" method="POST" onsubmit="handleForm(event)">
+          <input type="hidden" name="_subject" value="New enquiry from YK Wellness website" />
+          <!-- Honeypot: bots fill this, humans don't -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
           <div class="form-row">
             <div class="form-group">
               <label for="fname">First Name</label>
@@ -247,6 +250,9 @@
           <div style="font-size:2rem;margin-bottom:0.5rem;">✓</div>
           <h4 style="font-family:var(--font-sans);margin-bottom:0.4rem;">Message sent!</h4>
           <p style="font-size:0.9rem;margin:0;">Thanks for getting in touch. We'll reply within one working day.</p>
+        </div>
+        <div id="form-error" style="display:none;margin-top:1rem;background:#f6e3dc;border:1px solid #e0b8a8;border-radius:var(--radius-md);padding:1rem 1.25rem;font-size:0.9rem;color:#8a3d24;">
+          Something went wrong sending your message. Please try again, or email us directly at <a href="mailto:hello@ykwellness.co.uk" style="color:#8a3d24;text-decoration:underline;">hello@ykwellness.co.uk</a>.
         </div>
       </div>
 
@@ -414,8 +420,37 @@
 <script>
 function handleForm(e) {
   e.preventDefault();
-  document.querySelector('form').style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
+  var form    = document.getElementById('contactForm');
+  var success = document.getElementById('form-success');
+  var errorEl = document.getElementById('form-error');
+  var btn     = form.querySelector('button[type="submit"]');
+
+  errorEl.style.display = 'none';
+  var originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(function (res) {
+    if (res.ok) {
+      form.style.display = 'none';
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      res.json().then(function (data) {
+        errorEl.style.display = 'block';
+      }).catch(function () { errorEl.style.display = 'block'; });
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  }).catch(function () {
+    errorEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  });
 }
 </script>
 </body>

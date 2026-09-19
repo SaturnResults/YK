@@ -2509,3 +2509,25 @@ footer {
   .ykc-section__header { padding: 1.1rem 1.2rem; }
   .ykc-section__input { padding: 0.85rem 1rem; }
 }
+
+/* =============================================
+   FAQ (homepage)
+   ============================================= */
+.faq-list { max-width: 760px; margin: 2.5rem auto 0; }
+.faq-item { border-bottom: 1px solid var(--sand); }
+.faq-item summary {
+  cursor: pointer; list-style: none; padding: 1.25rem 0;
+  font-family: var(--font-sans); font-weight: 600; font-size: 1.05rem;
+  color: var(--charcoal); display: flex; justify-content: space-between;
+  align-items: center; gap: 1rem;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+"; font-size: 1.5rem; line-height: 1; color: var(--sage);
+  font-weight: 400; flex-shrink: 0;
+}
+.faq-item[open] summary::after { content: "\2212"; }
+.faq-item summary:hover { color: var(--sage-dark); }
+.faq-item__a { padding: 0 0 1.35rem; }
+.faq-item__a p { color: var(--mid); font-size: 0.98rem; line-height: 1.7; margin: 0; }
+.faq-item__a a { color: var(--sage-dark); font-weight: 600; }
