@@ -337,11 +337,25 @@ if (backToTop) {
   backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
-// Cookie banner
+// Cookie banner (injected if the page doesn't already include one, so it appears site-wide)
 (function () {
-  const banner = document.getElementById('cookieBanner');
-  if (!banner) return;
   if (localStorage.getItem('yk_cookies')) return;
+
+  let banner = document.getElementById('cookieBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.id = 'cookieBanner';
+    banner.innerHTML =
+      '<div class="cookie-banner__inner">' +
+        '<p>We use cookies to improve your experience. By continuing you agree to our <a href="/privacy-policy/">Privacy Policy</a>.</p>' +
+        '<div class="cookie-banner__actions">' +
+          '<button class="cookie-banner__decline" id="cookieDecline">Decline</button>' +
+          '<button class="cookie-banner__accept" id="cookieAccept">Accept</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(banner);
+  }
 
   // Slight delay so it slides up after page load
   setTimeout(() => banner.classList.add('show'), 800);
