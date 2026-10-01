@@ -408,5 +408,25 @@
   <a href="../contact.html">Contact</a>
     <div class="footer-built">Built by <a href="https://saturnresults.co.uk" target="_blank" rel="noopener">Saturn Results</a></div>
 </footer>
+<!-- Temporary closure announcement bar. To reopen: delete this script. -->
+<script>
+(function () {
+  var bar = document.createElement('div');
+  bar.id = 'yk-closed-bar';
+  bar.setAttribute('role', 'status');
+  bar.innerHTML = '<strong style="color:#c49a6c;">YK Wellness is temporarily closed.</strong> Big, exciting changes are coming soon.';
+  bar.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:200;background:#1a0d05;color:#fdf8f3;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;line-height:1.45;text-align:center;padding:0.6rem 1rem;box-shadow:0 1px 0 rgba(255,255,255,0.08);";
+  document.body.insertBefore(bar, document.body.firstChild);
+  function fit() {
+    var h = bar.offsetHeight;
+    var header = document.querySelector('.lp-header');
+    if (header) header.style.top = h + 'px';
+    document.body.style.paddingTop = h + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit, { passive: true });
+  window.addEventListener('load', fit);
+})();
+</script>
 </body>
 </html>

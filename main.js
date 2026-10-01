@@ -1,3 +1,41 @@
+// Temporary closure announcement bar (site-wide).
+// To reopen: delete this whole IIFE.
+(function () {
+  if (document.getElementById('yk-closed-bar')) return;
+
+  var bar = document.createElement('div');
+  bar.id = 'yk-closed-bar';
+  bar.setAttribute('role', 'status');
+  bar.innerHTML =
+    '<span class="yk-closed-bar__inner">' +
+      '<strong>YK Wellness is temporarily closed.</strong> ' +
+      '<span>Big, exciting changes are coming soon.</span>' +
+    '</span>';
+  bar.style.cssText = [
+    'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:1000',
+    'background:#1a0d05', 'color:#fdf8f3',
+    "font-family:var(--font-sans, 'DM Sans', sans-serif)",
+    'font-size:0.9rem', 'font-weight:500', 'line-height:1.45',
+    'text-align:center', 'padding:0.6rem 1rem',
+    'box-shadow:0 1px 0 rgba(255,255,255,0.08)'
+  ].join(';');
+
+  document.body.insertBefore(bar, document.body.firstChild);
+  var strong = bar.querySelector('strong');
+  if (strong) strong.style.color = '#c49a6c';
+
+  // Push the fixed nav and page content down so nothing is hidden behind the bar
+  function fit() {
+    var h = bar.offsetHeight;
+    var nav = document.getElementById('nav');
+    if (nav) nav.style.top = h + 'px';
+    document.body.style.paddingTop = h + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit, { passive: true });
+  window.addEventListener('load', fit);
+})();
+
 // Hero slider
 (function () {
   const slider = document.getElementById('heroSlider');
