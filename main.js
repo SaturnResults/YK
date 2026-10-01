@@ -1,7 +1,9 @@
-// Temporary closure announcement bar (site-wide).
+// Temporary closure announcement bar (shows on every page EXCEPT pages that
+// already have the red hero closure banner, i.e. the homepage).
 // To reopen: delete this whole IIFE.
 (function () {
   if (document.getElementById('yk-closed-bar')) return;
+  if (document.querySelector('.hero-closed-banner')) return;
 
   var bar = document.createElement('div');
   bar.id = 'yk-closed-bar';
