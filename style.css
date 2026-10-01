@@ -2531,3 +2531,24 @@ footer {
 .faq-item__a { padding: 0 0 1.35rem; }
 .faq-item__a p { color: var(--mid); font-size: 0.98rem; line-height: 1.7; margin: 0; }
 .faq-item__a a { color: var(--sage-dark); font-weight: 600; }
+
+/* =============================================
+   HERO CLOSURE BANNER
+   ============================================= */
+.hero-closed-banner {
+  flex-shrink: 0;
+  background: #c0392b;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.01em;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
+  padding: 0.9rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+}
+@media (max-width: 640px) {
+  .hero-closed-banner { font-size: 1rem; padding: 0.8rem 1rem; margin-bottom: 0.85rem; }
+}
